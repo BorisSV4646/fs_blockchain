@@ -1,0 +1,80 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in library 'fs_blockchain'",
+      "cargo": {
+        "args": ["test", "--no-run", "--lib", "--package=fs_blockchain"],
+        "filter": {
+          "name": "fs_blockchain",
+          "kind": "lib"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'fs_blockchain'",
+      "cargo": {
+        "args": ["build", "--bin=fs_blockchain", "--package=fs_blockchain"],
+        "filter": {
+          "name": "fs_blockchain",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'fs_blockchain'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--bin=fs_blockchain",
+          "--package=fs_blockchain"
+        ],
+        "filter": {
+          "name": "fs_blockchain",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'node'",
+      "cargo": {
+        "args": ["build", "--bin=node", "--package=fs_blockchain"],
+        "filter": {
+          "name": "node",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'node'",
+      "cargo": {
+        "args": ["test", "--no-run", "--bin=node", "--package=fs_blockchain"],
+        "filter": {
+          "name": "node",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
