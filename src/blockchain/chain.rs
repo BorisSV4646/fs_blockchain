@@ -6,7 +6,7 @@ pub struct Blockchain {
 
 impl Blockchain {
     pub fn new() -> Self {
-        let genesis_block = Block::new(0, "Генезис-блок".to_string(), "0".to_string());
+        let genesis_block = Block::new(0, Vec::new(), "0".to_string());
         Blockchain {
             blocks: vec![genesis_block],
         }

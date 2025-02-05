@@ -1,17 +1,16 @@
 use super::{block::Block, chain::Blockchain, transaction::Transaction};
+use crate::consensus::dpos::DPoS;
 
 pub struct Miner {
     pub blockchain: Blockchain,
     pub pending_transactions: Vec<Transaction>,
-    pub difficulty: usize,
 }
 
 impl Miner {
-    pub fn new(difficulty: usize) -> Self {
+    pub fn new() -> Self {
         Miner {
             blockchain: Blockchain::new(),
             pending_transactions: Vec::new(),
-            difficulty,
         }
     }
 
@@ -19,17 +18,20 @@ impl Miner {
         self.pending_transactions.push(transaction);
     }
 
-    pub fn mine_pending_transactions(&mut self) {
-        let data = serde_json::to_string(&self.pending_transactions)
-            .unwrap_or_else(|_| "Ошибка сериализации".to_string());
-        let index = self.blockchain.blocks.len() as u32;
-        let prev_hash = self.blockchain.last_hash();
-
-        let mut new_block = Block::new(index, data, prev_hash);
-        new_block.mine(self.difficulty);
-
-        self.blockchain.add_block(new_block);
-        // Очистка пула транзакций после добавления блока
-        self.pending_transactions.clear();
+    pub fn produce_block(&mut self, dpos: &mut DPoS) {
+        if let Some(selected) = dpos.select_delegate() {
+            let index = self.blockchain.blocks.len() as u32;
+            let prev_hash = self.blockchain.last_hash();
+            let transactions = self.pending_transactions.clone();
+            let new_block = Block::new(index, transactions, prev_hash);
+            self.blockchain.add_block(new_block);
+            self.pending_transactions.clear();
+            println!(
+                "Блок, созданный делегатом {} (id: {}), добавлен в блокчейн.",
+                selected.name, selected.id
+            );
+        } else {
+            println!("Нет делегатов для выбора, блок не создан.");
+        }
     }
 }
