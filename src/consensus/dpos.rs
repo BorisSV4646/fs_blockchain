@@ -19,11 +19,15 @@ impl Delegate {
 
 pub struct DPoS {
     pub delegates: Vec<Delegate>,
+    current_delegate_index: usize,
 }
 
 impl DPoS {
     pub fn new(delegates: Vec<Delegate>) -> Self {
-        DPoS { delegates }
+        DPoS {
+            delegates,
+            current_delegate_index: 0,
+        }
     }
 
     pub fn vote(&mut self, delegate_id: u64, votes: u64) -> Result<()> {
@@ -31,11 +35,27 @@ impl DPoS {
             delegate.votes += votes;
             Ok(())
         } else {
-            Err(AppError::DelegateNotFound(42))
+            Err(AppError::DelegateNotFound(delegate_id))
         }
     }
 
-    pub fn select_delegate(&mut self) -> Option<&Delegate> {
-        self.delegates.iter().max_by_key(|delegate| delegate.votes)
+    pub fn select_delegate(&mut self) -> Result<&Delegate> {
+        if self.delegates.is_empty() {
+            return Err(AppError::NoDelegates);
+        }
+
+        let mut top_delegates: Vec<&Delegate> = self.delegates.iter().collect();
+        top_delegates.sort_by_key(|delegate| std::cmp::Reverse(delegate.votes));
+
+        let top = if top_delegates.len() > 10 {
+            &top_delegates[..10]
+        } else {
+            &top_delegates[..]
+        };
+
+        let idx = self.current_delegate_index % top.len();
+        self.current_delegate_index = self.current_delegate_index.wrapping_add(1);
+
+        Ok(top[idx])
     }
 }

@@ -1,9 +1,15 @@
+use env_logger::Builder;
 use fs_blockchain::{
     blockchain::{miner::Miner, transaction::Transaction},
     consensus::dpos::{DPoS, Delegate},
+    core::errors::Result,
 };
+use log::LevelFilter;
 
-fn main() {
+fn main() -> Result<()> {
+    Builder::new().filter(None, LevelFilter::Info).init();
+    log::info!("Запуск FS Spin блокчейн");
+
     let delegate1 = Delegate::new(1, "Alice");
     let delegate2 = Delegate::new(2, "Bob");
     let delegate3 = Delegate::new(3, "Charlie");
@@ -30,5 +36,6 @@ fn main() {
         5.0,
     ));
 
-    miner.produce_block(&mut dpos);
+    miner.produce_block(&mut dpos)?;
+    Ok(())
 }

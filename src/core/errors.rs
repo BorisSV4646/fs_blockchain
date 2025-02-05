@@ -4,6 +4,7 @@ use std::fmt;
 pub enum AppError {
     DelegateNotFound(u64),
     TransactionError(String),
+    NoDelegates,
 }
 
 impl fmt::Display for AppError {
@@ -11,6 +12,7 @@ impl fmt::Display for AppError {
         match self {
             AppError::DelegateNotFound(id) => write!(f, "Делегат с id {} не найден", id),
             AppError::TransactionError(msg) => write!(f, "Ошибка транзакции: {}", msg),
+            AppError::NoDelegates => write!(f, "Нет делегатов"),
         }
     }
 }
