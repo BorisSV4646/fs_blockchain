@@ -1,5 +1,5 @@
 use env_logger::Builder;
-use fs_blockchain::{
+use blockchain::{
     blockchain::{miner::Miner, transaction::Transaction},
     consensus::dpos::{DPoS, Delegate},
     core::errors::Result,

@@ -1,15 +1,6 @@
-[package]
-name = "fs_blockchain"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-chrono = "0.4.39"
-env_logger = "0.11.6"
-log = "0.4.25"
-reqwest = "0.12.12"
-serde = {version = "1.0.217", features = ["derive"]}
-serde_json = "1.0.138"
-sha2 = "0.10.8"
-tokio = {version = "*", features = ["full"]}
-toml = "0.8.19"
+[workspace]
+members = [
+    "node",
+    "blockchain"
+]
+resolver = "2"
