@@ -6,6 +6,8 @@ pub enum AppError {
     Reqwest(reqwest::Error),
     TomlParse(toml::de::Error),
     TomlSerialize(toml::ser::Error),
+    IgdSearch(igd::SearchError),
+    IgdAddPort(igd::AddPortError),
 }
 
 impl fmt::Display for AppError {
@@ -15,11 +17,25 @@ impl fmt::Display for AppError {
             AppError::Reqwest(e) => write!(f, "Reqwest error: {}", e),
             AppError::TomlParse(e) => write!(f, "TOML parse error: {}", e),
             AppError::TomlSerialize(e) => write!(f, "TOML serialize error: {}", e),
+            AppError::IgdSearch(e) => write!(f, "UPnP search error: {}", e),
+            AppError::IgdAddPort(e) => write!(f, "UPnP add port error: {}", e),
         }
     }
 }
 
 impl std::error::Error for AppError {}
+
+impl From<igd::SearchError> for AppError {
+    fn from(e: igd::SearchError) -> Self {
+        AppError::IgdSearch(e)
+    }
+}
+
+impl From<igd::AddPortError> for AppError {
+    fn from(e: igd::AddPortError) -> Self {
+        AppError::IgdAddPort(e)
+    }
+}
 
 impl From<std::io::Error> for AppError {
     fn from(e: std::io::Error) -> Self {
