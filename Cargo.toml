@@ -2,5 +2,6 @@
 members = [
     "crates/blockchain_core",
     "crates/blockchain_cli",
+    "crates/blockchain_node",
 ]
 resolver = "2"
