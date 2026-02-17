@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "crates/blockchain_core",
+    "crates/blockchain_cli",
+]
+resolver = "2"

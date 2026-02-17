@@ -1,0 +1,9 @@
+[package]
+name = "blockchain_cli"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+blockchain_core = { path = "../blockchain_core" }
+serde = { version = "1", features = ["derive"] }
+toml = "1"
