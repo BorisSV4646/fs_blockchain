@@ -21,6 +21,26 @@ pub enum TransactionStatus {
 }
 
 impl Transaction {
+    fn calculate_hash(
+        from: &Address,
+        to: &Address,
+        amount: u64,
+        timestamp: &Timestamp,
+        fee: u64,
+        nonce: u64,
+    ) -> Hash {
+        let raw = format!(
+            "{}:{}:{}:{}:{}:{}",
+            from.as_str(),
+            to.as_str(),
+            amount,
+            timestamp.as_u64(),
+            fee,
+            nonce
+        );
+        Hash::new(&raw)
+    }
+
     pub fn new(
         from: Address,
         to: Address,
@@ -31,16 +51,7 @@ impl Transaction {
         nonce: u64,
         signature: Signature,
     ) -> Self {
-        let raw = format!(
-            "{}:{}:{}:{}:{}:{}",
-            from.as_str(),
-            to.as_str(),
-            amount,
-            timestamp.as_u64(),
-            fee,
-            nonce
-        );
-        let hash = Hash::new(&raw);
+        let hash = Self::calculate_hash(&from, &to, amount, &timestamp, fee, nonce);
 
         Self {
             hash: hash,
@@ -56,7 +67,27 @@ impl Transaction {
     }
 
     pub fn is_valid(&self) -> bool {
-        let _ = self;
-        todo!("transaction validation implementation is not added yet")
+        if self.amount == 0 {
+            return false;
+        }
+
+        if self.fee > self.amount {
+            return false;
+        }
+
+        if self.signature.as_str().trim().is_empty() {
+            return false;
+        }
+
+        let expected_hash = Self::calculate_hash(
+            &self.from,
+            &self.to,
+            self.amount,
+            &self.timestamp,
+            self.fee,
+            self.nonce,
+        );
+
+        expected_hash.as_str() == self.hash.as_str()
     }
 }
