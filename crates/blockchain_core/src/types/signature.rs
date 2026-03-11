@@ -1,10 +1,12 @@
+use crate::error::TypeError;
+
 #[derive(Debug, Clone)]
 pub struct Signature(String);
 
 impl Signature {
-    pub fn new(input: &str) -> Result<Self, String> {
+    pub fn new(input: &str) -> Result<Self, TypeError> {
         if input.trim().is_empty() {
-            return Err("signature cannot be empty".to_string());
+            return Err(TypeError::EmptySignature);
         }
 
         Ok(Self(input.to_string()))

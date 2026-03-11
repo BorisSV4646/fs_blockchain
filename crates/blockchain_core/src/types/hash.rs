@@ -1,5 +1,7 @@
 use sha2::{Digest, Sha256};
 
+use crate::error::TypeError;
+
 #[derive(Debug, Clone)]
 pub struct Hash(String);
 
@@ -11,13 +13,13 @@ impl Hash {
         Self(format!("{:x}", result))
     }
 
-    pub fn from_hex(hex: String) -> Result<Self, String> {
+    pub fn from_hex(hex: String) -> Result<Self, TypeError> {
         if hex.is_empty() {
-            return Err("hash cannot be empty".to_string());
+            return Err(TypeError::EmptyHash);
         }
 
         if !hex.chars().all(|ch| ch.is_ascii_hexdigit()) {
-            return Err("hash must contain only hexadecimal characters".to_string());
+            return Err(TypeError::InvalidHashHex);
         }
 
         Ok(Self(hex))
