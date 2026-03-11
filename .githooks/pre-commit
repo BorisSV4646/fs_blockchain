@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+echo "Running pre-commit build check..."
+
+if ! cargo build --workspace --all-targets; then
+  echo
+  echo "Pre-commit failed: workspace build check did not pass."
+  exit 1
+fi
