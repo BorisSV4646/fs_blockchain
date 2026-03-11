@@ -8,7 +8,7 @@ pub use types::*;
 
 use thiserror::Error;
 
-#[derive(Debug, Error)]
+#[derive(Debug, Error)]1
 pub enum BlockchainError {
     #[error(transparent)]
     Type(#[from] TypeError),
