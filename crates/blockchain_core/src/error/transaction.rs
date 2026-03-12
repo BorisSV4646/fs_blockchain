@@ -2,11 +2,14 @@ use thiserror::Error;
 
 #[derive(Debug, Error, Clone, PartialEq, Eq)]
 pub enum TransactionError {
-    #[error("transaction amount must be greater than zero")]
-    InvalidAmount,
+    #[error("transaction chain id must be greater than zero")]
+    InvalidChainId,
 
-    #[error("transaction fee cannot exceed amount")]
-    FeeExceedsAmount,
+    #[error("transaction gas limit must be greater than zero")]
+    InvalidGasLimit,
+
+    #[error("max priority fee per gas cannot exceed max fee per gas")]
+    PriorityFeeExceedsMaxFee,
 
     #[error("transaction hash does not match payload")]
     InvalidHash,
